@@ -13,15 +13,15 @@ pipeline {
   stages {
     stage('Docker Build') {
       steps {
-	      checkout([$class: 'GitSCM', branches: [[name: '*/prod']], extensions: [], userRemoteConfigs: [[credentialsId: 'Keygen-ssh', url: 'git@github.com:i-dair-tech/ri-codex-frontend.git']]])
+	      checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Keygen-ssh', url: 'git@github.com:i-dair-tech/i-dair-codex-frontend.git']]])
       }
     }
     stage('version') {
       steps {
         script { 
-           def patch  = readFile('/var/lib/jenkins/workspace/ri-codex-frontend.ci/front-patchs.txt').trim()
-          def major  = readFile('/var/lib/jenkins/workspace/ri-codex-frontend.ci/majors.txt').trim()
-          def minornew  = readFile('/var/lib/jenkins/workspace/ri-codex-frontend.ci/minors.txt').trim()
+           def patch  = readFile('/var/lib/jenkins/workspace/i-dair-codex-frontend.ci/front-patchs.txt').trim()
+          def major  = readFile('/var/lib/jenkins/workspace/i-dair-codex-frontend.ci/majors.txt').trim()
+          def minornew  = readFile('/var/lib/jenkins/workspace/i-dair-codex-frontend.ci/minors.txt').trim()
           version = "${major}.${minornew}.${patch}"
           echo "${version}"
         }
@@ -32,11 +32,11 @@ pipeline {
         script { 
           withCredentials([usernamePassword(credentialsId: 'idair', passwordVariable: 'idairpass', usernameVariable: 'idairuser')])  {
             echo "${version}"
-            sh "docker build -t windsocially/ri-codex-frontendlocal:v.${version} . -f dockerfile.development"
-            sh "docker push  windsocially/ri-codex-frontendlocal:v.${version}"
+            sh "docker build -t windsocially/i-dair-codex-frontendlocal:v.${version} . -f dockerfile.development"
+            sh "docker push  windsocially/i-dair-codex-frontend:v.${version}"
           }
         }
-        sh "docker rmi -f windsocially/ri-codex-frontendlocal:v.${version}"
+        sh "docker rmi -f windsocially/i-dair-codex-frontend:v.${version}"
       }
     }
   }
