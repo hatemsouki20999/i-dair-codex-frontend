@@ -33,10 +33,10 @@ pipeline {
           withCredentials([usernamePassword(credentialsId: 'idair', passwordVariable: 'idairpass', usernameVariable: 'idairuser')])  {
             echo "${version}"
             sh "docker build -t windsocially/i-dair-codex-frontendlocal:v.${version} . -f dockerfile.development"
-            sh "docker push  windsocially/i-dair-codex-frontend:v.${version}"
+            sh "docker push  windsocially/i-dair-codex-frontendlocal:v.${version}"
           }
         }
-        sh "docker rmi -f windsocially/i-dair-codex-frontend:v.${version}"
+        sh "docker rmi -f windsocially/i-dair-codex-i-dair-codex-frontendlocal:v.${version}"
       }
     }
   }
